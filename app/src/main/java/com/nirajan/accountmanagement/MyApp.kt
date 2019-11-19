@@ -1,8 +1,16 @@
 package com.nirajan.accountmanagement
 
 import android.app.Application
+import com.nirajan.accountmanagement.api.MirrorService
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Moshi.Builder
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MyApp : Application() {
 
@@ -10,7 +18,27 @@ class MyApp : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MyApp)
-            // modules(anchorPlayerService)
+            modules(mirrorService)
         }
+    }
+}
+
+private val mirrorService = module {
+    factory {
+        Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    factory {
+        Retrofit.Builder()
+            .baseUrl("https://dev.refinemirror.com/api/v1/")
+            .addConverterFactory(MoshiConverterFactory.create(get<Moshi>()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+    }
+
+    single {
+        get<Retrofit>().create(MirrorService::class.java)
     }
 }

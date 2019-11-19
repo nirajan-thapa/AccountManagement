@@ -1,11 +1,15 @@
 package com.nirajan.accountmanagement.signup
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
+import com.nirajan.accountmanagement.api.MirrorService
 import com.nirajan.accountmanagement.base.BaseViewModel
+import io.reactivex.schedulers.Schedulers
+import org.koin.android.ext.android.inject
 
 data class SignUpState(
     val fullName: String? = null,
@@ -15,7 +19,8 @@ data class SignUpState(
 ) : MvRxState
 
 class SignUpViewModel(
-    initialState: SignUpState
+    initialState: SignUpState,
+    private val mirrorService: MirrorService
 ) : BaseViewModel<SignUpState>(initialState) {
 
     fun setFullName(fullName: String) = setState {
@@ -36,15 +41,31 @@ class SignUpViewModel(
         )
     }
 
-    fun signUp() =
-        withState {
+    fun signUp() = withState { state ->
+        if (state.signUpRequest is Loading) return@withState
 
-        }
+        if (state.email == null || state.fullName == null || state.password == null)
+            return@withState
+
+        mirrorService
+            .signUp(
+                name = state.fullName,
+                email = state.email,
+                password = state.password
+            )
+            .subscribeOn(Schedulers.io())
+            .execute {
+                copy (
+                    signUpRequest = it
+                )
+            }
+    }
 
     companion object : MvRxViewModelFactory<SignUpViewModel, SignUpState> {
 
         override fun create(viewModelContext: ViewModelContext, state: SignUpState): SignUpViewModel {
-            return SignUpViewModel(state)
+            val mirrorService: MirrorService by viewModelContext.activity.inject()
+            return SignUpViewModel(state, mirrorService)
         }
     }
 }

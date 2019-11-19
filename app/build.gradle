@@ -1,0 +1,31 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: '../dependencies.gradle'
+
+android {
+    defaultConfig {
+        applicationId "com.nirajan.accountmanagement"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation architectureDependencies.values()
+    implementation kotlinDependencies.values()
+    implementation ktxDependencies.values()
+    implementation styleDependencies.values()
+    implementation injectionDependencies.values()
+    implementation apiDependencies.values()
+    implementation imageDependencies.values()
+    kapt kaptDependencies.values()
+
+    implementation testingDependencies.values()
+}

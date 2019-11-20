@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.nirajan.accountmanagement.R
 import com.nirajan.accountmanagement.base.BaseFragment
 import com.nirajan.accountmanagement.base.simpleController
+import com.nirajan.accountmanagement.login.LoginActivity
 import com.nirajan.accountmanagement.signup.views.signUpView
 
 class SignUpFragment : BaseFragment() {
@@ -54,6 +55,13 @@ class SignUpFragment : BaseFragment() {
             buttonClickListener { _ ->
                 viewModel.signUp()
             }
+
+            goToLoginClickListener {_ ->
+                activity?.let {
+                    startActivity(LoginActivity.intent(it))
+                    it.finish()
+                }
+            }
         }
     }
 
@@ -62,6 +70,7 @@ class SignUpFragment : BaseFragment() {
         toolbar = view.findViewById(R.id.toolbar)
         coordinatorLayout = view.findViewById(R.id.coordinator_layout)
         recyclerView.setController(epoxyController)
+        toolbar.title = resources.getString(R.string.signup_title)
 
         viewModel.asyncSubscribe(SignUpState::signUpRequest, onFail = { error ->
             Snackbar.make(coordinatorLayout, "Sign Up request failed.", Snackbar.LENGTH_LONG)

@@ -1,10 +1,14 @@
 package com.nirajan.accountmanagement
 
 import android.app.Application
+import android.content.Context
+import com.google.gson.GsonBuilder
+import com.nirajan.accountmanagement.MyApp.Companion.LOGIN_PREF
 import com.nirajan.accountmanagement.api.MirrorService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Moshi.Builder
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -20,6 +24,10 @@ class MyApp : Application() {
             androidContext(this@MyApp)
             modules(mirrorService)
         }
+    }
+
+    companion object {
+        const val LOGIN_PREF = "login_pref"
     }
 }
 
@@ -41,4 +49,13 @@ private val mirrorService = module {
     single {
         get<Retrofit>().create(MirrorService::class.java)
     }
+
+    single {
+        androidApplication().getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE)
+    }
+
+    single {
+        GsonBuilder().create()
+    }
+
 }

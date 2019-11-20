@@ -1,5 +1,6 @@
 package com.nirajan.accountmanagement.login
 
+import android.content.SharedPreferences
 import android.util.Log
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
@@ -7,6 +8,8 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
+import com.nirajan.accountmanagement.API_TOKEN
+import com.nirajan.accountmanagement.USER_LOGGED_IN
 import com.nirajan.accountmanagement.api.MirrorService
 import com.nirajan.accountmanagement.base.BaseViewModel
 import io.reactivex.schedulers.Schedulers
@@ -20,6 +23,7 @@ data class LoginState(
 
 class LoginViewModel(
     initialState: LoginState,
+    private val sharedPreferences: SharedPreferences,
     private val mirrorService: MirrorService
 ) : BaseViewModel<LoginState>(initialState) {
 
@@ -50,6 +54,11 @@ class LoginViewModel(
             .subscribeOn(Schedulers.io())
             .execute {
                 Log.d("LoginViewModel", "$it")
+                // Save API token
+                it()?.data?.api_token?.apply {
+                    sharedPreferences.edit().putString(API_TOKEN, this)
+                }
+                sharedPreferences.edit().putBoolean(USER_LOGGED_IN, true)
                 copy (
                     loginRequest = it
                 )
@@ -64,9 +73,13 @@ class LoginViewModel(
      */
     companion object : MvRxViewModelFactory<LoginViewModel, LoginState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: LoginState): LoginViewModel {
+        override fun create(
+            viewModelContext: ViewModelContext,
+            state: LoginState
+        ): LoginViewModel {
             val mirrorService: MirrorService by viewModelContext.activity.inject()
-            return LoginViewModel(state, mirrorService)
+            val sharedPreferences: SharedPreferences by viewModelContext.activity.inject()
+            return LoginViewModel(state, sharedPreferences, mirrorService)
         }
     }
 }

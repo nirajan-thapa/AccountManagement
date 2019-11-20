@@ -15,6 +15,7 @@ ext.versions = [
         constraintLayout        : '1.1.2',
         retrofitVersion         : '2.4.0',
         moshiVersion            : '1.6.0',
+        gson                    : '2.8.2',
         glide                   : '4.9.0',
         junit                   : '4.12',
         testRunner              : '1.2.0',
@@ -54,7 +55,7 @@ ext {
     ]
 
     injectionDependencies = [
-            koin         : "org.koin:koin-android:${versions.koinVersion}"
+            koin: "org.koin:koin-android:${versions.koinVersion}"
     ]
 
     kaptDependencies = [
@@ -67,11 +68,12 @@ ext {
     ]
 
     apiDependencies = [
-            retrofit        :  "com.squareup.retrofit2:retrofit:${versions.retrofitVersion}",
-            retrofitAdapter : "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofitVersion}",
-            retrofitMoshi   : "com.squareup.retrofit2:converter-moshi:${versions.retrofitVersion}",
-            moshi           : "com.squareup.moshi:moshi:${versions.moshiVersion}",
-            moshiKotlin     : "com.squareup.moshi:moshi-kotlin:${versions.moshiVersion}"
+            retrofit       : "com.squareup.retrofit2:retrofit:${versions.retrofitVersion}",
+            retrofitAdapter: "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofitVersion}",
+            retrofitMoshi  : "com.squareup.retrofit2:converter-moshi:${versions.retrofitVersion}",
+            gson           : "com.google.code.gson:gson:${versions.gson}",
+            moshi          : "com.squareup.moshi:moshi:${versions.moshiVersion}",
+            moshiKotlin    : "com.squareup.moshi:moshi-kotlin:${versions.moshiVersion}"
     ]
 
     testingDependencies = [

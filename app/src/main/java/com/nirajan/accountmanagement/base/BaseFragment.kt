@@ -35,7 +35,8 @@ abstract class BaseFragment : BaseMvRxFragment() {
     }
 
     override fun invalidate() {
-        recyclerView.requestModelBuild()
+        if (::recyclerView.isInitialized)
+            recyclerView.requestModelBuild()
     }
 
     /**

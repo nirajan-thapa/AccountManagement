@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply from: '../dependencies.gradle'
 
+androidExtensions {
+    experimental = true
+}
+
 android {
     defaultConfig {
         applicationId "com.nirajan.accountmanagement"

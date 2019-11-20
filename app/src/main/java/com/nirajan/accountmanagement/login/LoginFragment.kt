@@ -11,6 +11,7 @@ import com.nirajan.accountmanagement.R
 import com.nirajan.accountmanagement.base.BaseFragment
 import com.nirajan.accountmanagement.base.simpleController
 import com.nirajan.accountmanagement.login.views.loginView
+import com.nirajan.accountmanagement.signup.SignUpActivity
 
 class LoginFragment : BaseFragment() {
 
@@ -21,7 +22,7 @@ class LoginFragment : BaseFragment() {
     override fun epoxyController() = simpleController {
         loginView {
             id("login-view")
-            emailTextChanged(object: TextWatcher {
+            emailTextChanged(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {}
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -31,7 +32,7 @@ class LoginFragment : BaseFragment() {
                 }
             })
 
-            passwordTextChanged(object: TextWatcher {
+            passwordTextChanged(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {}
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -44,6 +45,14 @@ class LoginFragment : BaseFragment() {
             buttonClickListener { _ ->
                 viewModel.login()
             }
+
+            goToSignUpClickListener { _ ->
+                activity?.let {
+                    startActivity(SignUpActivity.intent(it))
+                    it.finish()
+                }
+            }
+
         }
     }
 
@@ -52,12 +61,21 @@ class LoginFragment : BaseFragment() {
         toolbar = view.findViewById(R.id.toolbar)
         coordinatorLayout = view.findViewById(R.id.coordinator_layout)
         recyclerView.setController(epoxyController)
+        toolbar.title = resources.getString(R.string.login_title)
 
-        viewModel.asyncSubscribe(LoginState::loginRequest, onFail = { error ->
-            Snackbar.make(coordinatorLayout, "Login request failed.", Snackbar.LENGTH_LONG)
-                .show()
-            Log.w(TAG, "Login request failed", error)
-        })
+        viewModel.asyncSubscribe(
+            LoginState::loginRequest,
+            onSuccess = {
+                Snackbar.make(coordinatorLayout, "Login successful", Snackbar.LENGTH_LONG)
+                    .show()
+                // Go to
+            },
+            onFail = { error ->
+                Snackbar.make(coordinatorLayout, "Login request failed.", Snackbar.LENGTH_LONG)
+                    .show()
+                Log.w(TAG, "Login request failed", error)
+            }
+        )
     }
 
     companion object {

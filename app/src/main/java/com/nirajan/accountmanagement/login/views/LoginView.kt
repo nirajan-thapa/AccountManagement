@@ -8,6 +8,7 @@ import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelView
 import com.nirajan.accountmanagement.R
 import kotlinx.android.synthetic.main.login_view.view.email
+import kotlinx.android.synthetic.main.login_view.view.go_to_signup
 import kotlinx.android.synthetic.main.login_view.view.login_btn
 import kotlinx.android.synthetic.main.login_view.view.password
 
@@ -23,11 +24,6 @@ class LoginView @JvmOverloads constructor(
     }
 
     @CallbackProp
-    fun setButtonClickListener(clickListener: OnClickListener?) {
-        login_btn.setOnClickListener(clickListener)
-    }
-
-    @CallbackProp
     fun setEmailTextChanged(onTextWatcher: TextWatcher?) {
         email.addTextChangedListener(onTextWatcher)
     }
@@ -35,5 +31,15 @@ class LoginView @JvmOverloads constructor(
     @CallbackProp
     fun setPasswordTextChanged(onTextWatcher: TextWatcher?) {
         password.addTextChangedListener(onTextWatcher)
+    }
+
+    @CallbackProp
+    fun setButtonClickListener(clickListener: OnClickListener?) {
+        login_btn.setOnClickListener(clickListener)
+    }
+
+    @CallbackProp
+    fun setGoToSignUpClickListener(clickListener: OnClickListener?) {
+        go_to_signup.setOnClickListener(clickListener)
     }
 }

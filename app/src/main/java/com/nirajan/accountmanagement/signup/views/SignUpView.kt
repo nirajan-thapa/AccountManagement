@@ -10,6 +10,7 @@ import com.nirajan.accountmanagement.R
 import kotlinx.android.synthetic.main.login_view.view.email
 import kotlinx.android.synthetic.main.login_view.view.password
 import kotlinx.android.synthetic.main.sign_up_view.view.full_name
+import kotlinx.android.synthetic.main.sign_up_view.view.go_to_login
 import kotlinx.android.synthetic.main.sign_up_view.view.sign_up_btn
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -26,6 +27,11 @@ class SignUpView @JvmOverloads constructor(
     @CallbackProp
     fun setButtonClickListener(clickListener: OnClickListener?) {
         sign_up_btn.setOnClickListener(clickListener)
+    }
+
+    @CallbackProp
+    fun setGoToLoginClickListener(clickListener: OnClickListener?) {
+        go_to_login.setOnClickListener(clickListener)
     }
 
     @CallbackProp

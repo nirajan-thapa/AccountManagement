@@ -73,7 +73,7 @@ class SignUpFragment : BaseFragment() {
         toolbar.title = resources.getString(R.string.signup_title)
 
         viewModel.asyncSubscribe(SignUpState::signUpRequest, onFail = { error ->
-            Snackbar.make(coordinatorLayout, "Sign Up request failed.", Snackbar.LENGTH_LONG)
+            Snackbar.make(coordinatorLayout, "Sign Up successful.", Snackbar.LENGTH_LONG)
                 .show()
             Log.w(TAG, "Sign Up request failed", error)
         })

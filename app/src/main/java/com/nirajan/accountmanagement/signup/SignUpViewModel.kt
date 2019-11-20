@@ -1,11 +1,13 @@
 package com.nirajan.accountmanagement.signup
 
+import android.content.SharedPreferences
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
+import com.nirajan.accountmanagement.API_TOKEN
 import com.nirajan.accountmanagement.api.MirrorService
 import com.nirajan.accountmanagement.base.BaseViewModel
 import io.reactivex.schedulers.Schedulers
@@ -20,6 +22,7 @@ data class SignUpState(
 
 class SignUpViewModel(
     initialState: SignUpState,
+    private val sharedPreferences: SharedPreferences,
     private val mirrorService: MirrorService
 ) : BaseViewModel<SignUpState>(initialState) {
 
@@ -56,6 +59,10 @@ class SignUpViewModel(
             )
             .subscribeOn(Schedulers.io())
             .execute {
+                // Save API token
+                it()?.data?.api_token?.apply {
+                    sharedPreferences.edit().putString(API_TOKEN, this)
+                }
                 copy (
                     signUpRequest = it
                 )
@@ -65,8 +72,9 @@ class SignUpViewModel(
     companion object : MvRxViewModelFactory<SignUpViewModel, SignUpState> {
 
         override fun create(viewModelContext: ViewModelContext, state: SignUpState): SignUpViewModel {
+            val sharedPreferences: SharedPreferences by viewModelContext.activity.inject()
             val mirrorService: MirrorService by viewModelContext.activity.inject()
-            return SignUpViewModel(state, mirrorService)
+            return SignUpViewModel(state, sharedPreferences, mirrorService)
         }
     }
 }

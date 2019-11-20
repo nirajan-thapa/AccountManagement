@@ -51,7 +51,8 @@ class SignUpViewModel(
             .signUp(
                 name = state.fullName,
                 email = state.email,
-                password = state.password
+                password = state.password,
+                password2 = state.password
             )
             .subscribeOn(Schedulers.io())
             .execute {

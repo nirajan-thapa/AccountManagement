@@ -32,7 +32,7 @@ private val mirrorService = module {
 
     factory {
         Retrofit.Builder()
-            .baseUrl("https://dev.refinemirror.com/api/v1/")
+            .baseUrl("https://dev.refinemirror.com/")
             .addConverterFactory(MoshiConverterFactory.create(get<Moshi>()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
